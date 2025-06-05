@@ -1811,14 +1811,25 @@ class BrowserSession(BaseModel):
 
 		# 0. Attempt full-page screenshot (sometimes times out for huge pages)
 		try:
+			# Try to save screenshot to local file
+			timestamp = int(time.time())
+			filename = f"screenshot_{timestamp}.png"
+			WORKDIR = os.getenv('WORKDIR', '')
+			screenshots_dir = f"{WORKDIR}/datasets/webarena/test_browser_use/screenshots/"
+			if not screenshots_dir.exists():
+			# Create the directory if it doesn't exist
+				os.makedirs(screenshots_dir, exist_ok=True)  # Ensure the directory exists
+			filepath = Path(f"{screenshots_dir}/{filename}")
+
 			screenshot = await page.screenshot(
 				full_page=full_page,
 				scale='css',
 				timeout=15000,
 				animations='disabled',
 				caret='initial',
+				path = filepath
 			)
-
+			
 			screenshot_b64 = base64.b64encode(screenshot).decode('utf-8')
 			return screenshot_b64
 		except Exception as e:

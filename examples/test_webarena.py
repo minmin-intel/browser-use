@@ -69,7 +69,7 @@ def setup_agent(args, prompt):
         # Initialize the model
         llm=ChatDeepSeek(
             base_url='https://api.deepseek.com/v1', 
-            model='deepseek-chat', 
+            model='deepseek-reasoner', 
             api_key=SecretStr(api_key),
             temperature=0.3,
             )

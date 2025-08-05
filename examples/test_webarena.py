@@ -80,6 +80,20 @@ def setup_agent(args, prompt):
             use_vision=False,
             enable_memory=False,
         )
+    elif args.model_provider == "openrouter":
+        api_key = os.getenv("OPENROUTER_API_KEY")
+        llm = ChatOpenAI(
+            base_url="https://openrouter.ai/api/v1",
+            model = "openrouter/horizon-beta",
+            api_key=SecretStr(api_key),
+            temperature=0.3,
+        )
+        agent = Agent(
+            task=prompt,
+            llm=llm,
+            use_vision=True,
+            enable_memory=False,
+        )
     elif args.model_provider == "together":
         print("Using Together model API...")
         api_key = os.getenv("TOGETHER_API_KEY")
